@@ -3,7 +3,7 @@
 class CSVDataSource extends ADataSource
 {
 
-    public function getCustomerTransactions(int $customerID)
+    public function findTransactionsByCustomerID(int $customerID)
     {
         // TODO: Implement getCustomerTransactions() method.
     }

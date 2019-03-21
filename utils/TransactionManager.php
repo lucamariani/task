@@ -11,8 +11,12 @@ class TransactionManager extends ATransactionManager
         parent::__construct($dataSource);
     }
 
+    /**
+     * @param int $customerID
+     * @return Transaction[]
+     */
     public function getCustomerTransactions(int $customerID)
     {
-        // TODO: Implement getCustomerTransactions() method.
+        return $this->dataSource->findTransactionsByCustomerID($customerID);
     }
 }

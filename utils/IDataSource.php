@@ -2,5 +2,5 @@
 
 interface IDataSource
 {
-    public function getCustomerTransactions(int $customerID);
+    public function findTransactionsByCustomerID(int $customerID);
 }

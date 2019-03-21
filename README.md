@@ -47,3 +47,9 @@ REST/HTTP.
 
 Anche (e soprattutto) in questo caso è indispensabile indicare nel README tutti i 
 passaggi necessari all'installazione e verifica.
+
+
+### Librerie utilizzate
+
+- PHPUnit (composer require --dev phpunit/phpunit ^7) - questa versione 
+  necessita di php-7.1+

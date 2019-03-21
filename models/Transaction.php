@@ -76,4 +76,16 @@ class Transaction
         $this->value = $value;
     }
 
+    /**
+     * Return the value's currency
+     * @return string|null
+     */
+    public function getCurrencySymbol(): ?string
+    {
+        if($this->value)
+        {
+            return substr($this->value, 0, 1);
+        }
+        return null;
+    }
 }
