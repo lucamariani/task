@@ -35,11 +35,13 @@ class CurrencyConverter
      */
     public function convertToEuro($amount, $currency, $date)
     {
-        return $this->convert($amount, $currency, self::EUR, $date);
+        $rate = $this->getRate($amount, $currency, self::EUR, $date);
+        return $amount * $rate;
     }
 
     /**
-     * Calls the webservice to convert currencies.
+     * Calls the webservice to get the conversion rate
+     * for these currencies in this date.
      * If the currencies are the same return the amount
      * without calling the webservice.
      *
@@ -49,10 +51,10 @@ class CurrencyConverter
      * @param string $date             the currency's day
      * @return float            the amount in converted currency
      */
-    private function convert($amount, $fromCurrency, $toCurrency, $date)
+    private function getRate($amount, $fromCurrency, $toCurrency, $date)
     {
         // avoid calling web service if not strictly needed
-        if(strcmp($fromCurrency, $toCurrency) == 0) return $amount;
+        if(strcmp($fromCurrency, $toCurrency) == 0) return 1;
         return $this->webService->getExchangeRate($fromCurrency, $toCurrency, $date);
     }
 }

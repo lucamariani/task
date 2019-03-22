@@ -43,6 +43,7 @@ class CurrencyWebservice implements ICurrencyWebservice
      * @param string $fromCurrency  the currency to which rate is requested
      * @param string $date          the date for the rate value
      * @return float                the exchange rate
+     * @throws WebserviceException  if no rate is available for this currency
      */
     private function getEURExchangeRate(string $fromCurrency, string $date)
     {
@@ -56,8 +57,8 @@ class CurrencyWebservice implements ICurrencyWebservice
                 $baseRate = 0.88;
                 break;
             default:
-                //@todo throw exception
-                throw new
+                //throws exception
+                throw new WebserviceException("Exchange rate from $fromCurrency currency to EUR is not supported.");
         }
         // return randomized rate
         return $this->randomizeRate($baseRate, $date);

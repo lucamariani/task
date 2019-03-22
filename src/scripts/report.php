@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+require __DIR__ . '/../../vendor/autoload.php';
 
 //TODO change with the requested from CLI
 $customerID = 1;
@@ -17,7 +19,7 @@ function writeReports($customerID, ITransactionManager $transactionManager)
     $transactions = $transactionManager->getCustomerTransactions($customerID);
     /** @var Transaction $transaction */
     foreach ($transactions as $transaction) {
-
+        print_r($transaction);
     }
 }
 
