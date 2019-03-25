@@ -2,7 +2,11 @@
 
 class Currency
 {
-    static $currencies = ['EUR' => '€', 'GBP' => '£', 'USD' => '$'];
+    const EUR = '€';
+    const GBP = '£';
+    const USD = '$';
+
+    static $currencies = ['EUR' => self::EUR, 'GBP' => self::GBP, 'USD' => self::USD];
 
     public static function getCurrencySymbolFromName(string $name) : string
     {

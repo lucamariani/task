@@ -19,15 +19,4 @@ abstract class ATransactionManager implements ITransactionManager
         $this->currencyConverter = $currencyConverter;
     }
 
-    /**
-     * Get the currency for a transaction's value.
-     * The value is the first character of value string.
-     *
-     * @param $value    value from which get the currency
-     * @return string   value's currency
-     */
-    protected function getCurrencyFromValue($value)
-    {
-        return "";
-    }
 }

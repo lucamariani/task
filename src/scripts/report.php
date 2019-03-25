@@ -8,11 +8,14 @@ $customerID = 2;
 // create a data source for transactions
 $dataSource = new CSVDataSource('data.csv', ";");
 
-// create a TransactionManager instance and inject the created dataSource
-$transactionManager = new TransactionManager($dataSource);
-
 // simulates the configuration of a WebServices by creating an instance of CurrencyWebservice
 $currencyWebService = new CurrencyWebservice();
+
+// create a CurrencyConverter instance
+$currencyConverter = new CurrencyConverter($currencyWebService);
+
+// create a TransactionManager instance and inject the created dataSource
+$transactionManager = new TransactionManager($dataSource, $currencyConverter);
 
 function writeReports($customerID, ITransactionManager $transactionManager)
 {

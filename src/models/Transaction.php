@@ -88,4 +88,17 @@ class Transaction
         }
         return null;
     }
+
+    /**
+     * Return the numeric value
+     * @return float|null
+     */
+    public function getValueAmount(): ?float
+    {
+        if($this->value)
+        {
+            return floatval(substr($this->value, 1));
+        }
+        return null;
+    }
 }
