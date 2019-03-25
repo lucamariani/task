@@ -4,17 +4,8 @@
  * Uses CurrencyWebservice
  *
  */
-class CurrencyConverter
+class CurrencyConverter extends ACurrencyConverter
 {
-
-    private $webService;
-
-    /**
-     * Define our currencies
-     */
-    const EUR = '€';
-    const GBP = '£';
-    const USD = '$';
 
     /**
      * CurrencyConverter constructor.
@@ -22,39 +13,58 @@ class CurrencyConverter
      */
     public function __construct(ICurrencyWebservice $webService)
     {
-        $this->webService = $webService;
+        parent::__construct($webService);
     }
+
+
 
     /**
      * Convert currencies to Euro.
+     * Override parent method.
      *
      * @param float $amount     the amount to be converted
      * @param string $currency  the currency from which convert to Euro
      * @param string $date      the currency's day
-     * @return float            the amount of Euro
+     * @return float            the amount of Euro | -1 if exception occurs
      */
-    public function convertToEuro($amount, $currency, $date)
+    protected function convertToEuro($amount, $currency, $date)
     {
-        $rate = $this->getRate($amount, $currency, self::EUR, $date);
+        try {
+            $rate = $this->getExchangeRate($amount, $currency, self::EUR, $date);
+        } catch (WebserviceException $wex) {
+            // log the exception (as we haven't used a logging system just output the exception in output stream)
+            echo "An exception occurred while converting currency to EUR.\r\n";
+            echo $wex->getMessage();
+            // return -1
+            return -1;
+        }
         return $amount * $rate;
     }
 
+
     /**
-     * Calls the webservice to get the conversion rate
-     * for these currencies in this date.
-     * If the currencies are the same return the amount
-     * without calling the webservice.
+     * Convert a currency in another currency
+     * for a specific exchenge rate's date
      *
-     * @param float $amount     the amount to be converted
-     * @param string $fromCurrency     the currency from which convert
-     * @param string $toCurrency       the currency to convert to
-     * @param string $date             the currency's day
-     * @return float            the amount in converted currency
+     *
+     * @param float     $amount         amount to be converted
+     * @param string    $fromCurrency   currency that needs to be converted
+     * @param string    $toCurrency     currency that needs to be converted to
+     * @param string    $date           exchange rate date
+     * @return float
      */
-    private function getRate($amount, $fromCurrency, $toCurrency, $date)
+    public function convert(float $amount, string $fromCurrency, string $toCurrency, string $date): float
     {
-        // avoid calling web service if not strictly needed
-        if(strcmp($fromCurrency, $toCurrency) == 0) return 1;
-        return $this->webService->getExchangeRate($fromCurrency, $toCurrency, $date);
+        switch ($toCurrency) {
+            case (self::EUR):
+                return $this->convertToEuro($amount, $fromCurrency, $date);
+                break;
+            case (self::GBP):
+                return $this->convertToGBP($amount, $fromCurrency, $date);
+                break;
+            case (self::USD):
+                return $this->convertToUSD($amount, $fromCurrency, $date);
+                break;
+        }
     }
 }

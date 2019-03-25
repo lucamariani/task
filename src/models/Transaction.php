@@ -21,9 +21,9 @@ class Transaction
      * @param string $date
      * @param string $value
      */
-    public function __construct($customer, $date, $value)
+    public function __construct($customerID, $date, $value)
     {
-        $this->customerID = $customer;
+        $this->customerID = $customerID;
         $this->date = $date;
         $this->value = $value;
     }

@@ -3,10 +3,10 @@
 require __DIR__ . '/../../vendor/autoload.php';
 
 //TODO change with the requested from CLI
-$customerID = 1;
+$customerID = 2;
 
 // create a data source for transactions
-$dataSource = new CSVDataSource();
+$dataSource = new CSVDataSource('data.csv', ";");
 
 // create a TransactionManager instance and inject the created dataSource
 $transactionManager = new TransactionManager($dataSource);
@@ -22,4 +22,6 @@ function writeReports($customerID, ITransactionManager $transactionManager)
         print_r($transaction);
     }
 }
+
+writeReports($customerID, $transactionManager);
 

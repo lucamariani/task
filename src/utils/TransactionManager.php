@@ -6,7 +6,7 @@ class TransactionManager extends ATransactionManager
     /**
      * TransactionManager constructor.
      */
-    public function __construct(IDataSource $dataSource)
+    public function __construct(IDataSource $dataSource, ICurrencyConverter $currencyConverter)
     {
         parent::__construct($dataSource);
     }
@@ -15,8 +15,11 @@ class TransactionManager extends ATransactionManager
      * @param int $customerID
      * @return Transaction[]
      */
-    public function getCustomerTransactions(int $customerID)
+    public function getCustomerTransactions(int $customerID) : array
     {
-        return $this->dataSource->findTransactionsByCustomerID($customerID);
+        $customerTransactions = array();
+        $storedCustomerTransaction = $this->dataSource->findTransactionsByCustomerID($customerID);
+
+        return $customerTransactions;
     }
 }

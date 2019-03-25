@@ -1,27 +1,26 @@
 <?php
 
 /**
- * Dummy web service returning random exchange rates.
+ * Class CurrencyWebservice
  *
+ * This class implements a dummy webservice
+ * that provide a proper implementation
+ * for EUR exchange rate.
  */
-class CurrencyWebservice implements ICurrencyWebservice
+class CurrencyWebservice extends ACurrencyWebservice
 {
 
     /**
-     * As this is supposed to be an external system
-     * here we define our currencies
-     */
-    const EUR = '€';
-    const GBP = '£';
-    const USD = '$';
-
-    const DATE_FORMAT = 'd/m/Y';
-
-    /**
-     * @todo return random value here for basic currencies like GBP USD EUR (simulates real API)
      *
+     * Return random value here for basic currencies like GBP USD EUR (simulates real API)
+     *
+     * @param string $fromCurrency  currency that needs to be converted
+     * @param string $toCurrency    currency that needs to be converted to
+     * @param string $date          exchange rate date
+     * @return float                exchange rate
+     * @throws WebserviceException  if no rate is available for this currency
      */
-    public function getExchangeRate($fromCurrency, $toCurrency, $date)
+    public function getExchangeRate($fromCurrency, $toCurrency, $date) : float
     {
         switch ($toCurrency) {
             case (self::EUR):
@@ -38,14 +37,15 @@ class CurrencyWebservice implements ICurrencyWebservice
 
     /**
      * This function define a base rate for these currencies
-     * and modify it randomly
+     * and modify it randomly.
+     * (it overrides base implementation as defined in parent class)
      *
-     * @param string $fromCurrency  the currency to which rate is requested
-     * @param string $date          the date for the rate value
-     * @return float                the exchange rate
+     * @param string $fromCurrency  currency to which rate is requested
+     * @param string $date          date for the rate value
+     * @return float                exchange rate
      * @throws WebserviceException  if no rate is available for this currency
      */
-    private function getEURExchangeRate(string $fromCurrency, string $date)
+    protected function getEURExchangeRate(string $fromCurrency, string $date)
     {
         switch ($fromCurrency) {
             case (self::GBP):
@@ -64,36 +64,4 @@ class CurrencyWebservice implements ICurrencyWebservice
         return $this->randomizeRate($baseRate, $date);
     }
 
-    private function getGBPExchangeRate(string $fromCurrency, string $date)
-    {
-        //@todo to be implemented in phase 2
-    }
-
-    private function getUSDExchangeRate(string $fromCurrency, string $date)
-    {
-        //@todo to be implemented in phase 2
-    }
-
-    /**
-     * This function randomize a base rate
-     * with a simple algorithm (just for testing purpose):
-     *
-     * get the timestamp from date
-     * get the power of 10 with exp -10 of timestamp
-     * if timestamp is odd add the power result to baseRate, otherwise subtract it t baseRate
-     *
-     * @param float $baseRate   the base rate
-     * @param string $date      the date to get the rate for
-     * @return float            the exchange rate
-     */
-    private function randomizeRate(float $baseRate, string $date)
-    {
-        $currencyDate = DateTime::createFromFormat(self::DATE_FORMAT, $date);
-        $ts = $currencyDate->getTimestamp();
-        $odd = $ts % 2 == 0;
-        $randomizedRate = ( $ts % 2 == 0 ) ? pow(10, -10) * $ts + $baseRate : pow(10, -10) * $ts - $baseRate;
-        $randomizedRoundRate = abs(round($randomizedRate, 3));
-
-        return $randomizedRoundRate;
-    }
 }

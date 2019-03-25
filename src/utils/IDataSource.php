@@ -2,5 +2,9 @@
 
 interface IDataSource
 {
-    public function findTransactionsByCustomerID(int $customerID);
+    /**
+     * @param int $customerID
+     * @return Transaction[]
+     */
+    public function findTransactionsByCustomerID(int $customerID): array;
 }

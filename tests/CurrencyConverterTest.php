@@ -18,7 +18,7 @@ class CurrencyConverterTest extends TestCase
         $amount = 100.23;
 
         $this->assertIsFloat(
-            $converter->convertToEuro($amount, CurrencyConverter::USD, '19/03/2019')
+            $converter->convert($amount, CurrencyConverter::USD, CurrencyConverter::EUR, '19/03/2019')
         );
     }
 
@@ -33,21 +33,20 @@ class CurrencyConverterTest extends TestCase
 
         $this->assertEquals(
             $amount,
-            $converter->convertToEuro($amount, CurrencyConverter::EUR, '19/03/2019')
+            $converter->convert($amount, CurrencyConverter::EUR,CurrencyConverter::EUR,  '19/03/2019')
         );
     }
 
     /**
-     * Converting HRK to EUR must raise an exception
+     * Converting HRK to EUR must raise an exception and return -1
      */
     public function testConvertKunaToEuro()
     {
-        $this->expectException(WebserviceException::class);
-
         $webService = new CurrencyWebservice();
         $converter = new CurrencyConverter($webService);
         $amount = 100.23;
 
-        $converter->convertToEuro($amount, 'HKR', '19/03/2019');
+        $result = $converter->convert($amount, 'HKR',CurrencyConverter::EUR,  '19/03/2019');
+        $this->assertEquals(-1, $result);
     }
 }
