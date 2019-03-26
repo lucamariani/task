@@ -10,10 +10,11 @@ abstract class ACurrencyWebservice implements ICurrencyWebservice
     /**
      * As this is supposed to be an external system
      * here we define our currencies
+     * (for convenience we use Currency class)
      */
-    const EUR = '€';
-    const GBP = '£';
-    const USD = '$';
+    const EUR = Currency::EUR;
+    const GBP = Currency::GBP;
+    const USD = Currency::USD;
 
     const DATE_FORMAT = 'd/m/Y';
 

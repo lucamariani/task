@@ -4,21 +4,20 @@ abstract class ACurrencyConverter implements ICurrencyConverter
 {
     /** @var ICurrencyWebservice $webService */
     private $webService;
-
-    /**
-     * Define our currencies
-     */
-    const EUR = '€';
-    const GBP = '£';
-    const USD = '$';
+    /** @var ExchangeRatesCache $ratesCache */
+    private $ratesCache;
 
     /**
      * ACurrencyConverter constructor.
-     * @param ICurrencyWebservice $webService
+     * Allows the use of a cache.
+     *
+     * @param ICurrencyWebservice   $webService
+     * @param ExchangeRatesCache    $ratesCache
      */
-    public function __construct(ICurrencyWebservice $webService)
+    public function __construct(ICurrencyWebservice $webService, IExchangeRatesCache $ratesCache = null)
     {
         $this->webService = $webService;
+        $this->ratesCache = $ratesCache;
     }
 
     /**
@@ -53,18 +52,38 @@ abstract class ACurrencyConverter implements ICurrencyConverter
      * If the currencies are the same return the amount
      * without calling the webservice.
      *
-     * @param float $amount the amount to be converted
-     * @param string $fromCurrency the currency from which convert
-     * @param string $toCurrency the currency to convert to
-     * @param string $date the currency's day
-     * @return float            the amount in converted currency
+     * @param string $fromCurrency  currency from which convert
+     * @param string $toCurrency    currency to convert to
+     * @param string $date          currency's day
+     * @return float                exchange rate
      * @throws WebserviceException
      */
-    protected function getExchangeRate($amount, $fromCurrency, $toCurrency, $date)
+    protected function getExchangeRate($fromCurrency, $toCurrency, $date)
     {
         // avoid calling web service if not strictly needed
         if(strcmp($fromCurrency, $toCurrency) == 0) return 1;
-        $exchangeRate = $this->webService->getExchangeRate($fromCurrency, $toCurrency, $date);
+
+        // use cache if configured
+        if($this->ratesCache)
+        {
+            // get the rate from cache if available
+            $rate = $this->ratesCache->getExchangeRate($fromCurrency, $toCurrency, $date);
+            if(!$rate)
+            {
+                // get the rate from web service
+                $rate = $this->webService->getExchangeRate($fromCurrency, $toCurrency, $date);
+                // put the rate in cache
+                $this->ratesCache->addExchangeRate($fromCurrency, $toCurrency, $date, $rate);
+            }
+        } else // not using cache
+        {
+            // get the rate from web service
+            $rate = $this->webService->getExchangeRate($fromCurrency, $toCurrency, $date);
+        }
+
+        return $rate;
     }
+
+
 
 }

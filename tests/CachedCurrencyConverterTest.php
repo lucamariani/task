@@ -5,7 +5,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Class CurrencyConverterTest
  */
-class CurrencyConverterTest extends TestCase
+class CachedCurrencyConverterTest extends TestCase
 {
 
     /**
@@ -14,11 +14,11 @@ class CurrencyConverterTest extends TestCase
     public function testConvertUSDToEuro()
     {
         $webService = new CurrencyWebservice();
-        $converter = new CurrencyConverter($webService);
+        $converter = new CachedCurrencyConverter($webService);
         $amount = 100.23;
 
         $this->assertIsFloat(
-            $converter->convert($amount, CurrencyConverter::USD, CurrencyConverter::EUR, '19/03/2019')
+            $converter->convert($amount, Currency::USD, Currency::EUR, '19/03/2019')
         );
     }
 
@@ -28,12 +28,12 @@ class CurrencyConverterTest extends TestCase
     public function testConvertEuroToEuro()
     {
         $webService = new CurrencyWebservice();
-        $converter = new CurrencyConverter($webService);
+        $converter = new CachedCurrencyConverter($webService);
         $amount = 100.23;
 
         $this->assertEquals(
             $amount,
-            $converter->convert($amount, CurrencyConverter::EUR,CurrencyConverter::EUR,  '19/03/2019')
+            $converter->convert($amount, Currency::EUR,Currency::EUR,  '19/03/2019')
         );
     }
 
@@ -43,10 +43,10 @@ class CurrencyConverterTest extends TestCase
     public function testConvertKunaToEuro()
     {
         $webService = new CurrencyWebservice();
-        $converter = new CurrencyConverter($webService);
+        $converter = new CachedCurrencyConverter($webService);
         $amount = 100.23;
 
-        $result = $converter->convert($amount, 'HKR',CurrencyConverter::EUR,  '19/03/2019');
+        $result = $converter->convert($amount, 'HKR',Currency::EUR,  '19/03/2019');
         $this->assertEquals(-1, $result);
     }
 }

@@ -7,7 +7,7 @@ class CurrencyTest extends TestCase
 
     public function testNameFromSymbol()
     {
-        $currencySymbol = '$';
+        $currencySymbol = Currency::USD;
         $result = Currency::getCurrencyNameFromSymbol($currencySymbol);
         $this->assertEquals('USD', $result);
     }
@@ -16,6 +16,6 @@ class CurrencyTest extends TestCase
     {
         $currencyName = 'USD';
         $result = Currency::getCurrencySymbolFromName($currencyName);
-        $this->assertEquals('$', $result);
+        $this->assertEquals(Currency::USD, $result);
     }
 }

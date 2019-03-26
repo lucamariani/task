@@ -30,7 +30,7 @@ class TransactionManager extends ATransactionManager
             $currency = $transaction->getCurrencySymbol();
             $date = $transaction->getDate();
             $eurValue = $this->currencyConverter->convert($value, $currency, Currency::EUR, $date);
-            $transaction->setValue($eurValue);
+            $transaction->setValue(Currency::EUR . $eurValue);
             $customerTransactions[] = $transaction;
         }
 

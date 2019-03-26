@@ -2,9 +2,9 @@
 
 class Currency
 {
-    const EUR = '€';
-    const GBP = '£';
-    const USD = '$';
+    const EUR = 'E';
+    const GBP = 'P';
+    const USD = 'D';
 
     static $currencies = ['EUR' => self::EUR, 'GBP' => self::GBP, 'USD' => self::USD];
 

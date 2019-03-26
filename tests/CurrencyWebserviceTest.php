@@ -10,7 +10,7 @@ class CurrencyWebserviceTest extends TestCase
         $currencyWebservice = new CurrencyWebservice();
 
         $this->assertIsFloat(
-            $currencyWebservice->getExchangeRate(CurrencyWebservice::GBP, CurrencyWebservice::EUR, '02/03/2019')
+            $currencyWebservice->getExchangeRate(Currency::GBP, Currency::EUR, '02/03/2019')
         );
     }
 
@@ -19,6 +19,6 @@ class CurrencyWebserviceTest extends TestCase
         $this->expectException(WebserviceException::class);
 
         $currencyWebservice = new CurrencyWebservice();
-        $currencyWebservice->getExchangeRate("@", CurrencyWebservice::EUR, '02/03/2019');
+        $currencyWebservice->getExchangeRate("@", Currency::EUR, '02/03/2019');
     }
 }

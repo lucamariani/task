@@ -1,5 +1,7 @@
 <?php
 
+ini_set( 'default_charset', 'UTF-8' );
+
 require __DIR__ . '/../../vendor/autoload.php';
 
 //TODO change with the requested from CLI
@@ -12,7 +14,7 @@ $dataSource = new CSVDataSource('data.csv', ";");
 $currencyWebService = new CurrencyWebservice();
 
 // create a CurrencyConverter instance
-$currencyConverter = new CurrencyConverter($currencyWebService);
+$currencyConverter = new CachedCurrencyConverter($currencyWebService);
 
 // create a TransactionManager instance and inject the created dataSource
 $transactionManager = new TransactionManager($dataSource, $currencyConverter);
@@ -22,7 +24,7 @@ function writeReports($customerID, ITransactionManager $transactionManager)
     $transactions = $transactionManager->getCustomerTransactions($customerID);
     /** @var Transaction $transaction */
     foreach ($transactions as $transaction) {
-        print_r($transaction);
+        echo $transaction->outputReport();
     }
 }
 

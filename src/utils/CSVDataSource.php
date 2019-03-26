@@ -53,7 +53,6 @@ class CSVDataSource extends ADataSource
         $it = new LimitIterator($file, $this->offset);
 
         foreach( $it as $row ) {
-            echo $row[0];
             if($row[0] == $customerID)
             {
                 $customerTransactions[] = new Transaction($row[0],$row[1],$row[2]);

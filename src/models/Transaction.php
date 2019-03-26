@@ -101,4 +101,21 @@ class Transaction
         }
         return null;
     }
+
+    /**
+     * @return string
+     */
+    public function outputReport(): string
+    {
+        $output = "\r\n************************\r\n";
+        $output .= "Transaction made by customer id: $this->customerID on date: $this->date with value: $this->value";
+
+        return $output;
+    }
+
+    public function __toString()
+    {
+        $output = "Transaction { customer id: $this->customerID, date: $this->date, value: $this->value }";
+        return $output;
+    }
 }

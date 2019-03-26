@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Uses CurrencyWebservice
- *
+ * Class CachedCurrencyConverter
+ * Convert currency using WebService and cache system
  */
-class CurrencyConverter extends ACurrencyConverter
+class CachedCurrencyConverter extends ACurrencyConverter
 {
 
     /**
@@ -13,7 +13,9 @@ class CurrencyConverter extends ACurrencyConverter
      */
     public function __construct(ICurrencyWebservice $webService)
     {
-        parent::__construct($webService);
+        // instantiate the cache to be used
+        $cache = new ExchangeRatesCache();
+        parent::__construct($webService, $cache);
     }
 
 
@@ -30,7 +32,7 @@ class CurrencyConverter extends ACurrencyConverter
     protected function convertToEuro($amount, $currency, $date)
     {
         try {
-            $rate = $this->getExchangeRate($amount, $currency, self::EUR, $date);
+            $rate = $this->getExchangeRate($currency, Currency::EUR, $date);
         } catch (WebserviceException $wex) {
             // log the exception (as we haven't used a logging system just output the exception in output stream)
             echo "An exception occurred while converting currency to EUR.\r\n";
@@ -56,15 +58,16 @@ class CurrencyConverter extends ACurrencyConverter
     public function convert(float $amount, string $fromCurrency, string $toCurrency, string $date): float
     {
         switch ($toCurrency) {
-            case (self::EUR):
+            case (Currency::EUR):
                 return $this->convertToEuro($amount, $fromCurrency, $date);
                 break;
-            case (self::GBP):
+            case (Currency::GBP):
                 return $this->convertToGBP($amount, $fromCurrency, $date);
                 break;
-            case (self::USD):
+            case (Currency::USD):
                 return $this->convertToUSD($amount, $fromCurrency, $date);
                 break;
         }
+
     }
 }
