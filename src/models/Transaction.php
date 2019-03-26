@@ -10,16 +10,18 @@ class Transaction
 {
     /** @var int $customerID */
     private $customerID;
+
     /** @var string $date */
     private $date;
+
     /** @var string $value */
     private $value;
 
     /**
      * Transaction constructor.
-     * @param int $customer
-     * @param string $date
-     * @param string $value
+     * @param int $customer     the customer id
+     * @param string $date      the transaction date
+     * @param string $value     the transaction value (currency symbol and amount)
      */
     public function __construct($customerID, $date, $value)
     {
@@ -107,7 +109,7 @@ class Transaction
      */
     public function outputReport(): string
     {
-        $output = "\r\n************************\r\n";
+        $output = "\r\n------------------------------------------------------------------------------\r\n";
         $output .= "Transaction made by customer id: $this->customerID on date: $this->date with value: $this->value";
 
         return $output;

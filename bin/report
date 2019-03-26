@@ -74,3 +74,6 @@ $application = new Application($customerID, $dataSource, $webService, $currencyC
 
 // execute the application
 $application->execute();
+
+// insert a blank line before console prompt
+echo "\r\n";

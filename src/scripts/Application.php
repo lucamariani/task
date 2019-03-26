@@ -68,6 +68,7 @@ class Application
 
         /** @var Transaction $transaction */
         foreach ($transactions as $transaction) {
+            // output transaction formatted for report
             echo $transaction->outputReport();
         }
     }
