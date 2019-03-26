@@ -5,6 +5,8 @@ class TransactionManager extends ATransactionManager
 
     /**
      * TransactionManager constructor.
+     * @param IDataSource $dataSource                   the data source to use to get data
+     * @param ICurrencyConverter $currencyConverter     the currency converter to use to query for exchange rate
      */
     public function __construct(IDataSource $dataSource, ICurrencyConverter $currencyConverter)
     {
@@ -12,8 +14,8 @@ class TransactionManager extends ATransactionManager
     }
 
     /**
-     * @param int $customerID
-     * @return Transaction[]
+     * @param int $customerID   the customer id we want to get the transactions
+     * @return Transaction[]    the customer's transactions
      */
     public function getCustomerTransactions(int $customerID) : array
     {

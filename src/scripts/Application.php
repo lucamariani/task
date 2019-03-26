@@ -66,7 +66,7 @@ class Application
             exit(0);
         }
 
-            /** @var Transaction $transaction */
+        /** @var Transaction $transaction */
         foreach ($transactions as $transaction) {
             echo $transaction->outputReport();
         }

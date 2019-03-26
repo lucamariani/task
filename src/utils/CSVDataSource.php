@@ -47,11 +47,20 @@ class CSVDataSource extends ADataSource
     {
         /** @var Transaction[] $customerTransactions */
         $customerTransactions = array();
+
+        // create an instance to read the csv file
         $file = new SplFileObject($this->filePath);
+
+        // set the csv delimiter
         $file->setCsvControl($this->delimiter);
+
+        // inform we want to read a csv file
         $file->setFlags(\SplFileObject::READ_CSV);
+
+        // use a LimitIterator instance to eventually skip some rows
         $it = new LimitIterator($file, $this->offset);
 
+        // read by row, create a Transaction instance and put it in array
         foreach( $it as $row ) {
             if($row[0] == $customerID)
             {
