@@ -50,8 +50,8 @@ Per eseguire i test lanciare il seguente comando:
 
 ### Librerie utilizzate
 
-- PHPUnit (composer require --dev phpunit/phpunit ^7) - questa versione 
-  necessita di php-7.1+
+- PHPUnit ver.8 (https://phpunit.de/) - questa versione 
+  necessita di php-7.2+
 - adhocore/cli (https://github.com/adhocore/php-cli) - 
   Framework agnostic Command Line Interface utilities and helpers for PHP
   
