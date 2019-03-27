@@ -1,0 +1,79 @@
+#!/usr/bin/php
+
+<?php
+
+/**
+ * This is a Command Line Interface to our application.
+ * It parses configuration options, create the requested objects
+ * and launches the application.
+ * It uses the adhocore/cli library (https://github.com/adhocore/php-cli)
+ */
+
+// set UTF-8 as default charset
+ini_set( 'default_charset', 'UTF-8' );
+
+// load needed libraries
+require __DIR__ . '/../vendor/autoload.php';
+
+// define our command
+$command = new Ahc\Cli\Input\Command("report", "Show customer transactions' report");
+
+// configure command's argument and options
+$command
+    ->version('1.0.0')->arguments('<customerID>')
+    // `-h --help`, `-V --version`, `-v --verbosity` options are already added by default.
+    ->option('-d|--data-source', 'Choose the data source to use: [csv, db]. Default: csv', null, 'csv')
+    ->option('-w|--web-service', 'Choose the web service to use: [Yahoo, Sole24Ore]. Default: Sole24Ore', null, 'Sole24Ore')
+    ->option('-c|--currency-converter', 'Choose the currency converter to use: [Normal, Cached]. Default: Cached', null, 'Cached')
+;
+
+// get the arguments array from cmdline
+$argv = $_SERVER['argv'];
+
+// arguments parsing raises an exception if
+// mandatory arguments miss
+try {
+    $command->parse($argv);
+} catch (Ahc\Cli\Exception\RuntimeException $exception)
+{
+    // output the excpetion message
+    echo $exception->getMessage();
+    echo "\r\n";
+    // output the command help (this call exits the application)
+    $command->showHelp();
+}
+
+// commodity variables
+$customerID = $command->customerID;
+$converter = $command->currencyConverter;
+$webservice = $command->webService;
+$datasource = $command->dataSource;
+
+// output what we are going to do
+echo "Showing transaction for customer $customerID
+Configuration:
+data source: $datasource,
+currency converter: $converter,
+web service: $webservice\r\n";
+
+/**
+ * As this is a dummy application we provide the same implementation for any selected option.
+ * In a real application the created object will differ based on option
+ */
+// create requested datasource
+$dataSource = ( $datasource == 'csv' ? new CSVDataSource('data.csv', ";") : new CSVDataSource('data.csv', ";"));
+
+// create requested webservice
+$webService = ($webservice == 'Sole24Ore' ? new CurrencyWebservice() : new CurrencyWebservice());
+
+// create requested converter
+$currencyConverter = ( $converter == 'Cached' ? new CachedCurrencyConverter($webService) : new CachedCurrencyConverter($webService));
+
+// create an Application instance and inject the created objects
+$application = new Application($customerID, $dataSource, $webService, $currencyConverter);
+
+// execute the application
+$application->execute();
+
+// insert a blank line before console prompt
+echo "\r\n";
